@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "yas-server-executor",
+    "name": "yas-server",
+    "region": "eu-central-1"
+  },
+  "api": {
+    "id": "vd2wzffzz8"
+  }
+}
