@@ -1,15 +1,19 @@
 const express = require('express')
 const cheerio = require('cheerio')
 const request = require('request')
-const app = express()
 const cors = require('cors')
+const app = express()
 
 const urls = [
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html'
   // "http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html"
 ]
 
-app.use(cors())
+app.use(
+  cors({
+    origin: 'https://sevic.me'
+  })
+)
 
 app.get('/', (req, res) => {
   let j = 0
