@@ -4,9 +4,8 @@ const app = express()
 const { getLectures, promisesInSequence } = require('./utils')
 
 const urls = [
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_015.html',
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html',
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html'
-  // "http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html"
 ]
 
 app.use(
@@ -17,9 +16,7 @@ app.use(
 
 app.get('/', (req, res) => {
   let days = []
-  const lectures = urls.map(url => () =>
-    getLectures(url, days, days.length, 0)
-  )
+  const lectures = urls.map(url => () => getLectures(url, days))
 
   promisesInSequence(lectures)
     .then(() => {
@@ -33,6 +30,7 @@ app.get('/', (req, res) => {
           return acc;
         }
       }, {}); */
+      console.log(days)
       res.json(days)
     })
     .catch(err => {
