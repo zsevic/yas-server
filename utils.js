@@ -77,11 +77,15 @@ const getLectures = (url, days) => {
                 continue
               }
               if (days[k] === undefined) {
-                if (!el.data.includes('Анализа 3')) {
+                if (
+                  !el.data.includes('Анализа 3') &&
+                  !el.data.includes('Програмске парадигме') &&
+                  !el.data.includes('Увод у нумеричку математику')
+                ) {
                   j += colspan
                   break
                 }
-                days.push({ course: el.data, group: 'x' })
+                days.push({ course: el.data }) //, group: 'x' })
                 if (days[k].course.includes('СБГ')) {
                   days[k].professor = 'СБГ'
                 }

@@ -1,22 +1,24 @@
 const express = require('express')
-const cors = require('cors')
 const app = express()
 const { getLectures, promisesInSequence } = require('./utils')
 
-const urls = [
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html',
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html'
+const links = [
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html',
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html'
 ]
 
-app.use(
-  cors({
-    origin: 'https://sevic.me'
-  })
-)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+})
 
 app.get('/', (req, res) => {
   let days = []
-  const lectures = urls.map(url => () => getLectures(url, days))
+  const lectures = links.map(url => () => getLectures(url, days))
 
   promisesInSequence(lectures)
     .then(() => {
