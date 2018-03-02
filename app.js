@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const { getLectures, promisesInSequence } = require('./utils')
 
 const links = [
@@ -7,14 +8,7 @@ const links = [
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html'
 ]
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  )
-  next()
-})
+app.use(cors())
 
 app.get('/', (req, res) => {
   let days = []
@@ -33,6 +27,7 @@ app.get('/', (req, res) => {
         }
       }, {}); */
       console.log(days)
+      // res.header('Access-Control-Allow-Origin', '*')
       res.json(days)
     })
     .catch(err => {
