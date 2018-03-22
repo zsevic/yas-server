@@ -1,18 +1,7 @@
 const request = require('request')
 const cheerio = require('cheerio')
 
-const promisesInSequence = funcs =>
-  funcs.reduce(
-    (promise, func) =>
-      promise.then(result =>
-        func(result).then(() => Array.prototype.concat.bind(result))
-      ),
-    Promise.resolve([])
-  )
-
-const getLectures = (url, days) => {
-  let j = 0
-  let k = days.length
+const getLectures = (url, index, boxCounters, days) => {
   return new Promise((resolve, reject) => {
     request(url, (err, response, body) => {
       if (!err && response.statusCode === 200) {
@@ -24,17 +13,15 @@ const getLectures = (url, days) => {
         table('td').each((i, element) => {
           let tabler = cheerio.load(element, { decodeEntities: false })
           let subtable = tabler('table > tbody > tr small')
-
           if (
             element.children &&
             element.children.length === 1 &&
             element.children[0].name === 'br' &&
             element.children[0].type === 'tag'
           ) {
-            j += 1
+            boxCounters[index] += 1
             return
           }
-
           let colspan = element.attribs.colspan
             ? parseInt(element.attribs.colspan)
             : 1
@@ -47,64 +34,76 @@ const getLectures = (url, days) => {
                 return
               }
               for (let x of reduced) {
-                if (days[k] === undefined) {
+                let counter = days[index].length - 1
+                if (days[index][counter]) {
+                  if (days[index][counter].hasOwnProperty('classroom')) {
+                    counter += 1
+                  }
+                }
+                if (!days[index][counter]) {
                   if (
                     !x.data.includes('Програмске парадигме') &&
                     !x.data.includes('Увод у нумеричку математику')
                   ) {
                     break
                   }
-                  days.push({ course: x.data })
-                } else if (days[k]) {
-                  if (!days[k].group) {
-                    days[k].group = x.data
-                  } else if (!days[k].professor) {
-                    days[k].professor = x.data
-                  } else {
-                    days[k].classroom = x.data
-                    days[k].day = Math.floor(j / 13) + 1
-                    days[k].start = (j - 1) % 13 + 1
-                    days[k].duration = colspan
-                    k++
-                  }
+                  days[index].push({ course: x.data })
+                } else if (!days[index][counter].group) {
+                  days[index][counter].group = x.data
+                } else if (!days[index][counter].professor) {
+                  days[index][counter].professor = x.data
+                } else {
+                  let j = boxCounters[index]
+                  days[index][counter].classroom = x.data
+                  days[index][counter].day = Math.floor(j / 13) + 1
+                  days[index][counter].start = (j - 1) % 13 + 1
+                  days[index][counter].duration = colspan
                 }
               }
             })
-            j += 1
+            boxCounters[index] += 1
           } else {
             for (let el of element.children) {
               if (!el.data || el.data === '\n') {
                 continue
               }
-              if (days[k] === undefined) {
+              let counter = days[index].length - 1
+              if (days[index][counter]) {
+                if (days[index][counter].hasOwnProperty('classroom')) {
+                  counter += 1
+                }
+              }
+              if (!days[index][counter]) {
                 if (
                   !el.data.includes('Анализа 3') &&
                   !el.data.includes('Програмске парадигме') &&
                   !el.data.includes('Увод у нумеричку математику')
                 ) {
-                  j += colspan
+                  boxCounters[index] += colspan
                   break
                 }
-                days.push({ course: el.data }) //, group: 'x' })
-                if (days[k].course.includes('СБГ')) {
-                  days[k].professor = 'СБГ'
+                days[index].push({ course: el.data }) //, group: 'x' })
+
+                if (
+                  days[index][counter] &&
+                  days[index][counter].course.includes('СБГ')
+                ) {
+                  days[index][counter].professor = 'СБГ'
                 }
-              } else if (days[k]) {
-                if (!days[k].professor) {
-                  days[k].professor = el.data
-                } else {
-                  days[k].classroom = el.data
-                  days[k].day = Math.floor(j / 13) + 1
-                  days[k].start = (j - 1) % 13 + 1
-                  days[k].duration = colspan
-                  k++
-                  j += colspan
-                }
+              } else if (!days[index][counter].professor) {
+                days[index][counter].professor = el.data
+              } else {
+                let j = boxCounters[index]
+                days[index][counter].classroom = el.data
+                days[index][counter].day = Math.floor(j / 13) + 1
+                days[index][counter].start = (j - 1) % 13 + 1
+                days[index][counter].duration = colspan
+                boxCounters[index] += colspan
               }
             }
           }
-          if (i === table('td').length - 1 || j >= 65) {
-            resolve(k)
+          if (i === table('td').length - 1 || boxCounters[index] >= 65) {
+            resolve(days)
           }
         })
       }
@@ -113,6 +112,5 @@ const getLectures = (url, days) => {
 }
 
 module.exports = {
-  getLectures,
-  promisesInSequence
+  getLectures
 }

@@ -1,9 +1,9 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const { getLectures, promisesInSequence } = require('./utils')
+const { getLectures } = require('./utils')
 
-const links = [
+const LINKS = [
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html',
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html'
 ]
@@ -12,27 +12,26 @@ app.use(cors())
 
 app.get('/', (req, res) => {
   let days = []
-  const lectures = links.map(url => () => getLectures(url, days))
+  let boxCounters = []
 
-  promisesInSequence(lectures)
-    .then(() => {
-      /* days = days.reduce((acc, current) => {
-        if (!acc[current.day]) {
-          acc[current.day] = [];
-          acc[current.day][current.start] = current;
-          return acc;
-        } else {
-          acc[current.day].push(current);
-          return acc;
-        }
-      }, {}); */
-      console.log(days)
-      // res.header('Access-Control-Allow-Origin', '*')
-      res.json(days)
-    })
-    .catch(err => {
-      res.send(err)
-    })
+  for (let i = 0; i < LINKS.length; i++) {
+    boxCounters.push(0)
+    days.push([])
+  }
+
+  const lectures = LINKS.map((url, index) =>
+    getLectures(url, index, boxCounters, days)
+  )
+
+  Promise.all(lectures).then(response => {
+    const lects = []
+    for (let i = 0; i < days.length; i++) {
+      for (let j = 0; j < days[i].length; j++) {
+        lects.push(days[i][j])
+      }
+    }
+    res.json(lects)
+  })
 })
 
 module.exports = app
