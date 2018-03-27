@@ -1,36 +1,33 @@
 const express = require('express')
-const app = express()
 const cors = require('cors')
 const { getLectures } = require('./utils')
-
-const LINKS = [
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html',
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html'
+const groups = [
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html', // 2i2a
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html' // 3i
 ]
+const app = express()
 
 app.use(cors())
 
 app.get('/', (req, res) => {
-  let days = []
+  let schedule = []
   let boxCounters = []
 
-  for (let i = 0; i < LINKS.length; i++) {
+  for (let i = 0; i < groups.length; i++) {
     boxCounters.push(0)
-    days.push([])
+    schedule.push([])
   }
 
-  const lectures = LINKS.map((url, index) =>
-    getLectures(url, index, boxCounters, days)
+  const courses = groups.map((url, index) =>
+    getLectures(url, index, boxCounters, schedule)
   )
 
-  Promise.all(lectures).then(response => {
-    const lects = []
-    for (let i = 0; i < days.length; i++) {
-      for (let j = 0; j < days[i].length; j++) {
-        lects.push(days[i][j])
-      }
-    }
-    res.json(lects)
+  Promise.all(courses).then(() => {
+    const lectures = schedule.reduce((acc, lecture) => {
+      return acc.concat(lecture)
+    }, [])
+
+    res.json(lectures)
   })
 })
 

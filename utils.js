@@ -10,9 +10,11 @@ const getLectures = (url, index, boxCounters, days) => {
         })
         let schedule = $('table > tbody > tr > td:nth-child(2)').html()
         let table = cheerio.load(schedule, { decodeEntities: false })
+
         table('td').each((i, element) => {
           let tabler = cheerio.load(element, { decodeEntities: false })
           let subtable = tabler('table > tbody > tr small')
+
           if (
             element.children &&
             element.children.length === 1 &&
@@ -22,24 +24,30 @@ const getLectures = (url, index, boxCounters, days) => {
             boxCounters[index] += 1
             return
           }
+
           let colspan = element.attribs.colspan
             ? parseInt(element.attribs.colspan)
             : 1
+
           if (subtable.length) {
             subtable.each((indix, elix) => {
               let reduced = elix.children.filter(
                 i => i.data && i.data !== '\n' && i.data !== '\xa0'
               )
+
               if (!reduced.length) {
                 return
               }
+
               for (let x of reduced) {
                 let counter = days[index].length - 1
+
                 if (days[index][counter]) {
                   if (days[index][counter].hasOwnProperty('classroom')) {
                     counter += 1
                   }
                 }
+
                 if (!days[index][counter]) {
                   if (
                     !x.data.includes('Програмске парадигме') &&
@@ -61,18 +69,22 @@ const getLectures = (url, index, boxCounters, days) => {
                 }
               }
             })
+
             boxCounters[index] += 1
           } else {
             for (let el of element.children) {
               if (!el.data || el.data === '\n') {
                 continue
               }
+
               let counter = days[index].length - 1
+
               if (days[index][counter]) {
                 if (days[index][counter].hasOwnProperty('classroom')) {
                   counter += 1
                 }
               }
+
               if (!days[index][counter]) {
                 if (
                   !el.data.includes('Анализа 3') &&
@@ -82,6 +94,7 @@ const getLectures = (url, index, boxCounters, days) => {
                   boxCounters[index] += colspan
                   break
                 }
+
                 days[index].push({ course: el.data }) //, group: 'x' })
 
                 if (
@@ -102,6 +115,7 @@ const getLectures = (url, index, boxCounters, days) => {
               }
             }
           }
+
           if (i === table('td').length - 1 || boxCounters[index] >= 65) {
             resolve(days)
           }
