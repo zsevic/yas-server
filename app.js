@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { getLectures } = require('./utils')
+const { getSchedule } = require('./utils')
 const groups = [
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html', // 2i2a
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html' // 3i
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
   }
 
   const courses = groups.map((url, index) =>
-    getLectures(url, index, boxCounters, schedule)
+    getSchedule(url, index, boxCounters, schedule)
   )
 
   Promise.all(courses).then(() => {
