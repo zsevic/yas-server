@@ -2,7 +2,7 @@
 
 > AWS lambda function for [Yet Another Schedule](https://sevic.me/yas)
 
-### Setup
+### :wrench: Setup
 
 ```
 npm install
