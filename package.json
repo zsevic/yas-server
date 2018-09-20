@@ -17,7 +17,7 @@
     "cheerio": "^1.0.0-rc.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
-    "request": "^2.83.0"
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "standard": "^10.0.3"
