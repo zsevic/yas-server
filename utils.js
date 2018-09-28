@@ -29,9 +29,7 @@ const getLectures = (
 
     if (!days[urlIndex][counter]) {
       if (
-        !lecture.data.includes('Анализа 3') &&
-        !lecture.data.includes('Програмске парадигме') &&
-        !lecture.data.includes('Увод у нумеричку математику')
+        !lecture.data.includes('Вероватноћа и статистика')
       ) {
         if (wholeBoxes) {
           boxCounters[urlIndex] += colspan
@@ -60,7 +58,7 @@ const getLectures = (
 
       days[urlIndex][counter].classroom = lecture.data
       days[urlIndex][counter].day = Math.floor(j / 13) + 1
-      days[urlIndex][counter].start = (j - 1) % 13 + 1
+      days[urlIndex][counter].start = ((j - 1) % 13) + 1
       days[urlIndex][counter].duration = colspan
 
       if (wholeBoxes) {

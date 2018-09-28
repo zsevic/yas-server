@@ -2,8 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const { getSchedule } = require('./utils')
 const groups = [
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html', // 2i2a
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html' // 3i
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html'
 ]
 const app = express()
 
