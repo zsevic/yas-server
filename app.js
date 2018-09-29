@@ -21,13 +21,17 @@ app.get('/', (req, res) => {
     getSchedule(url, index, boxCounters, schedule)
   )
 
-  Promise.all(courses).then(() => {
-    const lectures = schedule.reduce((acc, lecture) => {
-      return acc.concat(lecture)
-    }, [])
+  Promise.all(courses)
+    .then(() => {
+      const lectures = schedule.reduce((acc, lecture) => {
+        return acc.concat(lecture)
+      }, [])
 
-    res.json(lectures)
-  })
+      res.json(lectures)
+    })
+    .catch(e => {
+      res.json({ err: e.message })
+    })
 })
 
 module.exports = app
