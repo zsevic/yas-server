@@ -26,7 +26,6 @@ app.get('/', (req, res) => {
       const lectures = schedule.reduce((acc, lecture) => {
         return acc.concat(lecture)
       }, [])
-
       res.json(lectures)
     })
     .catch(e => {

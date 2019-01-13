@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "standard"
+    "test": "standard",
+    "dev": "nodemon src/app.local.js"
   },
   "keywords": [],
   "author": "",

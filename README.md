@@ -5,6 +5,6 @@
 ### :wrench: Setup
 
 ```
-npm install
-nodemon app.local.js
+npm i
+npm run dev
 ```
