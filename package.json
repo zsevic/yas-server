@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "standard",
-    "dev": "nodemon src/app.local.js"
+    "lint": "eslint --fix --ignore-path .eslintignore .",
+    "dev": "nodemon --exec babel-node src/app.local.js",
+    "start": "node -r esm src/app.local.js"
   },
   "keywords": [],
   "author": "",
@@ -15,10 +16,18 @@
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
     "cors": "^2.8.4",
-    "express": "^4.16.2",
-    "request": "^2.88.0"
+    "esm": "^3.2.14",
+    "express": "^4.16.2"
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "eslint": "^5.15.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
   }
 }

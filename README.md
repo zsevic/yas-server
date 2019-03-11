@@ -1,10 +1,10 @@
 # yas-server
 
-> AWS lambda function for [Yet Another Schedule](https://github.com/zsevic/yas)
+> Back-end for [Yet Another Schedule](https://github.com/zsevic/yas)
 
 ### :wrench: Setup
 
 ```
-npm i
-npm run dev
+yarn
+yarn dev
 ```
