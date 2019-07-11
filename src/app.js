@@ -4,7 +4,7 @@ import { getSchedule } from './utils'
 
 const groups = [
   'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_016.html', // 2i2a
-  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html', // 3i
+  'http://poincare.matf.bg.ac.rs/~kmiljan/raspored/sve/form_024.html' // 3i
 ]
 const app = express()
 
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   }
 
   const courses = groups.map(async (url, index) =>
-    getSchedule(url, index, boxCounters, schedule),
+    getSchedule(url, index, boxCounters, schedule)
   )
 
   Promise.all(courses)
