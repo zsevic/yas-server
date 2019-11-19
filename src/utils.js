@@ -1,5 +1,6 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
+const courses = ['Анализа 2', 'Вероватноћа']
 
 const getLectures = (
   box,
@@ -28,10 +29,8 @@ const getLectures = (
     }
 
     if (!days[urlIndex][counter]) {
-      if (
-        !lecture.data.includes('Анализа 3') &&
-        !lecture.data.includes('Програмске парадигме')
-      ) {
+      const chosenCourses = courses.filter(course => !lecture.data.includes(course))
+      if (chosenCourses.length === courses.length) {
         if (wholeBoxes) {
           boxCounters[urlIndex] += colspan
         }
