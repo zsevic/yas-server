@@ -82,7 +82,7 @@ const getLectures = (
   });
 };
 
-export const getSchedule = async (url, urlIndex, boxCounters, days) => {
+export const getCourses = async (url, urlIndex, boxCounters, days) => {
   try {
     const body = await axios(url);
     const $ = cheerio.load(body.data, {
