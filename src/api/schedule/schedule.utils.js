@@ -1,7 +1,21 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
+import { groups, courses } from '../../config/constants';
 
-const courses = ['Анализа 2', 'Вероватноћа'];
+export function getInitialSetup() {
+  const classes = [];
+  const boxCounters = [];
+
+  for (let i = 0; i < groups.length; i += 1) {
+    boxCounters.push(0);
+    classes.push([]);
+  }
+
+  return {
+    boxCounters,
+    classes,
+  };
+}
 
 const getLectures = (
   box,

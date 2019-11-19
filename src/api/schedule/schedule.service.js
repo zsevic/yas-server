@@ -1,14 +1,8 @@
 import { groups } from '../../config/constants';
-import { getSchedule } from '../../utils';
+import { getSchedule, getInitialSetup } from './schedule.utils';
 
 export async function getScheduler() {
-  const classes = [];
-  const boxCounters = [];
-
-  for (let i = 0; i < groups.length; i += 1) {
-    boxCounters.push(0);
-    classes.push([]);
-  }
+  const { boxCounters, classes } = getInitialSetup();
 
   const courses = groups.map(async (url, index) => getSchedule(url, index, boxCounters, classes));
 
