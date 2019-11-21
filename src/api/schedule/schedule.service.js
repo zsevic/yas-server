@@ -9,7 +9,7 @@ export async function getSchedule() {
   try {
     const schedule = await Promise.all(courses);
 
-    return schedule[0].flat();
+    return schedule[1].flat();
   } catch (e) {
     return { err: e.message };
   }

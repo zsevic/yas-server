@@ -33,7 +33,7 @@ const getLectures = (
     return;
   }
 
-  validLectures.forEach((lecture) => {
+  for (const lecture of validLectures) {
     let counter = days[urlIndex].length - 1;
 
     if (days[urlIndex][counter]) {
@@ -49,7 +49,7 @@ const getLectures = (
         if (wholeBoxes) {
           boxCounters[urlIndex] += colspan;
         }
-        return;
+        break;
       }
 
       if (wholeBoxes) {
@@ -79,7 +79,7 @@ const getLectures = (
         boxCounters[urlIndex] += colspan;
       }
     }
-  });
+  }
 };
 
 export const getCourses = async (url, urlIndex, boxCounters, days) => {
